@@ -1,0 +1,28 @@
+services:
+  mysqldb:
+    # Nome do container
+    container_name: mysql_prato_solidario
+
+    # Imagem utilizada
+    image: mysql:8.4.6
+
+    # Variaveis de ambiente do MySQL
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+
+    # Mapeamento de portas
+    ports:
+      - "3306:3306"
+
+    # Persistencia dos dados
+    volumes:
+      - ./.data/mysql-data8:/var/lib/mysql
+
+    restart: unless-stopped
+
+# Cada microsservico cria e usa o seu proprio banco neste servidor:
+#   doacao-service  -> doacoes
+#   reserva-service -> reservas
+# A criacao e automatica (createDatabaseIfNotExist=true na URL JDBC) e as
+# tabelas sao criadas pelas migrations do Flyway de cada servico.
+# Nenhum schema ou tabela e compartilhado entre os microsservicos.
